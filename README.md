@@ -14,7 +14,8 @@
 	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/ZingMP3logo.svg/2560px-ZingMP3logo.svg.png" width = "350px" height = "auto">
 </p>
 
-![screenshot](https://giffiles.alphacoders.com/979/9792.gif)
+![screenshot](https://i.imgur.com/HAIqtys.gif)
+
 <p align="center">
 	<a href="#team-members">Team members</a> -
 	<a href="#product">Product</a> -
