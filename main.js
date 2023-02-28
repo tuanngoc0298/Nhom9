@@ -1473,14 +1473,9 @@ const app = {
                     if (songNode) {
                         _this.currentIndex = Number(songNode.dataset.index);
                         const songActives = $$(`.playlist__list-song[data-index="${_this.currentIndex}"]`);
+                        _this.songs = _this.songPlaylists[0];
                         _this.loadCurrentSong();
-                        Array.from($$(".playlist__list-song.active")).forEach((songActive) => {
-                            songActive.classList.remove("playing");
-                            songActive.classList.remove("active");
-                        });
-                        Array.from(songActives).forEach((songActive) => {
-                            songActive.classList.add("active");
-                        });
+
                         audio.play();
                     }
                 }
