@@ -1173,7 +1173,7 @@ label .container__header-icon {
 }
 
 .playlist__list-song:hover,
-.playlist__list-song.active {
+.playlist__list .playlist__list-song.active {
     background-color: var(--bg-content-color);
 }
 
@@ -1261,7 +1261,7 @@ label .container__header-icon {
     display: none;
 }
 
-.playlist__list-song.active.playing .thumb--animate {
+.playlist__list .playlist__list-song.active.playing .thumb--animate {
     display: flex;
 }
 

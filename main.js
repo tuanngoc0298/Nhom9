@@ -1,5 +1,4 @@
 "use strict";
-
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
@@ -1240,7 +1239,7 @@ const app = {
         audio.ontimeupdate = function (e) {
             if (audio.duration) {
                 if (!_this.isSeeking) {
-                    const listDurationTime = $(".playlist__list-song.active .playlist__song-time");
+                    // const listDurationTime = $(".playlist__list .playlist__list-song.active .playlist__song-time");
                     trackTimes.forEach((trackTime) => {
                         trackTime.innerHTML = _this.audioCalTime(audio.currentTime);
                     });
@@ -1250,18 +1249,22 @@ const app = {
                     progressTracks.forEach((progressTrack) => {
                         progressTrack.style.width = Math.round((audio.currentTime / audio.duration) * 100) + "%";
                     });
-                    if (listDurationTime.innerText === "--/--" || listDurationTime.innerText === "") {
-                        _this.durationList[_this.currentPlaylist].splice(
-                            _this.currentIndex,
-                            1,
-                            _this.audioCalTime(audio.duration)
-                        );
-                        localStorage.setItem(DURATION_STORAGE_KEY, JSON.stringify(_this.durationList));
-                        listDurationTime.innerHTML = _this.durationList[_this.currentPlaylist][_this.currentIndex];
-                        durationTimes.forEach((durationTime) => {
-                            durationTime.innerHTML = _this.durationList[_this.currentPlaylist][_this.currentIndex];
-                        });
-                    }
+                    // if (
+                    //     listDurationTime.innerText === "--/--" ||
+                    //     listDurationTime.innerText === "" ||
+                    //     listDurationTime != null
+                    // ) {
+                    //     _this.durationList[_this.currentPlaylist].splice(
+                    //         _this.currentIndex,
+                    //         1,
+                    //         _this.audioCalTime(audio.duration)
+                    //     );
+                    //     localStorage.setItem(DURATION_STORAGE_KEY, JSON.stringify(_this.durationList));
+                    //     listDurationTime.innerHTML = _this.durationList[_this.currentPlaylist][_this.currentIndex];
+                    //     durationTimes.forEach((durationTime) => {
+                    //         durationTime.innerHTML = _this.durationList[_this.currentPlaylist][_this.currentIndex];
+                    //     });
+                    // }
                 }
             } else {
                 // Handling when seek
@@ -1409,9 +1412,11 @@ const app = {
         // Listen to playlist clicks
         songLists.forEach((songList) => {
             songList.onclick = function (e) {
-                const checkNode = e.target.closest(".playlist__list-song:not(.active) .playlist__song-check");
-                const songNode = e.target.closest(".playlist__list-song:not(.active)");
-                const optionNode = e.target.closest(".playlist__song-option");
+                const checkNode = e.target.closest(
+                    ".playlist__list .playlist__list-song:not(.active) .playlist__song-check"
+                );
+                const songNode = e.target.closest(".playlist__list .playlist__list-song:not(.active)");
+                const optionNode = e.target.closest(".playlist__list .playlist__song-option");
                 const heartIconBtn = e.target.closest(".song-btn--heart");
                 const micIconBtn = e.target.closest(".btn--mic");
 
@@ -1419,9 +1424,11 @@ const app = {
                     // Handle when clicking on the song
                     if (songNode) {
                         _this.currentIndex = Number(songNode.dataset.index);
-                        const songActives = $$(`.playlist__list-song[data-index="${_this.currentIndex}"]`);
+                        const songActives = $$(
+                            `.playlist__list .playlist__list-song[data-index="${_this.currentIndex}"]`
+                        );
                         _this.loadCurrentSong();
-                        Array.from($$(".playlist__list-song.active")).forEach((songActive) => {
+                        Array.from($$(".playlist__list .playlist__list-song.active")).forEach((songActive) => {
                             songActive.classList.remove("playing");
                             songActive.classList.remove("active");
                         });
@@ -1436,7 +1443,9 @@ const app = {
                 if (checkNode) {
                     checkNode.onclick = function (e) {
                         const inputCheck = e.target.closest(".playlist__song-check").querySelector(".mr-10");
-                        e.target.closest(".playlist__list-song").classList.toggle("active", inputCheck.checked);
+                        e.target
+                            .closest(".playlist__list .playlist__list-song")
+                            .classList.toggle("active", inputCheck.checked);
                     };
                 }
 
@@ -1462,9 +1471,11 @@ const app = {
 
         songListsCharts.forEach((songListChart) => {
             songListChart.onclick = function (e) {
-                const checkNode = e.target.closest(".playlist__list-song:not(.active) .playlist__song-check");
-                const songNode = e.target.closest(".playlist__list-song:not(.active)");
-                const optionNode = e.target.closest(".playlist__song-option");
+                const checkNode = e.target.closest(
+                    ".playlist__list-charts .playlist__list-song:not(.active) .playlist__song-check"
+                );
+                const songNode = e.target.closest(".playlist__list-charts .playlist__list-song:not(.active)");
+                const optionNode = e.target.closest(".playlist__list-charts .playlist__song-option");
                 const heartIconBtn = e.target.closest(".song-btn--heart");
                 const micIconBtn = e.target.closest(".btn--mic");
 
@@ -1472,21 +1483,22 @@ const app = {
                     // Handle when clicking on the song
                     if (songNode) {
                         _this.currentIndex = Number(songNode.dataset.index);
-                        const songActives = $$(`.playlist__list-song[data-index="${_this.currentIndex}"]`);
+                        const songActives = $$(
+                            `.playlist__list-charts .playlist__list-song[data-index="${_this.currentIndex}"]`
+                        );
                         _this.songs = _this.songPlaylists[0];
                         _this.loadCurrentSong();
+                        _this.songs = _this.songPlaylists[_this.currentPlaylist];
 
+                        Array.from($$(".playlist__list .playlist__list-song.active")).forEach((songActive) => {
+                            songActive.classList.remove("playing");
+                            songActive.classList.remove("active");
+                        });
                         audio.play();
                     }
                 }
 
                 //Handle when click on song checkbox
-                if (checkNode) {
-                    checkNode.onclick = function (e) {
-                        const inputCheck = e.target.closest(".playlist__song-check").querySelector(".mr-10");
-                        e.target.closest(".playlist__list-song").classList.toggle("active", inputCheck.checked);
-                    };
-                }
 
                 // Handle when clicking on the song option
                 if (optionNode) {
@@ -2068,9 +2080,10 @@ const app = {
                 this.setConfig("currentPlaylist", this.currentPlaylist);
                 this.scrollToActiveSong();
             } else {
-                showNotificationToast(
-                    "Trang web hiện tại chưa hoàn thiện, bạn vui lòng chọn 4 playlist đã được cập nhật!"
-                );
+                this.currentPlaylist = 3;
+                this.loadCurrentSongPlaylist(this.currentPlaylist);
+                this.setConfig("currentPlaylist", this.currentPlaylist);
+                this.scrollToActiveSong();
             }
         }
     },
@@ -2111,7 +2124,7 @@ const app = {
         durationTimes.forEach((durationTime) => {
             durationTime.innerHTML = this.durationList[this.currentPlaylist][this.currentIndex];
         });
-        this.setConfig("currentIndex", this.currentIndex);
+        // this.setConfig("currentIndex", this.currentIndex);
     },
 
     setPlayerInfoWidth() {
